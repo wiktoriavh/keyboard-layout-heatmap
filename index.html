@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + TS</title>
+  </head>
+  <body class="h-screen flex justify-center items-center">
+    <div class="gap-4" x-data="keyboard" id="foo">
+      <section>
+        <h1 class="text-4xl font-bold">Layout</h1>
+        <textarea x-model="layout"></textarea>
+      </section>
+
+      <section class="border-2 border-gray-400 p-4 flex flex-col gap-4">
+        <template x-for="row in layout.split('\n')">
+          <div class="flex gap-4">
+            <template x-for="letter in row.split('')">
+              <kbd
+                x-text="letter"
+                class="px-2 border-2 border-gray-500 font-mono text-4xl aspect-square w-12 text-center"
+                :class="{
+                  'bg-[#003049]': heatmap[letter].heat >= 80,
+                  'bg-[#D62828]': heatmap[letter].heat >= 60 && heatmap[letter].heat < 80,
+                  'bg-[#F77F00]': heatmap[letter].heat >= 40 && heatmap[letter].heat < 60,
+                  'bg-[#FCBF49]': heatmap[letter].heat >= 20 && heatmap[letter].heat < 40,
+                  'bg-[#EAE2B7]': heatmap[letter].heat < 20,
+                  'bg-white': heatmap[letter].heat === 0,
+                  
+                }"
+              ></kbd>
+            </template>
+          </div>
+        </template>
+      </section>
+
+      <section>
+        <h1 class="text-4xl font-bold">Sample Text</h1>
+        <textarea x-model="sample"></textarea>
+      </section>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
