@@ -8,6 +8,7 @@ type Heatmap = {
   [x: string]: {
     heat: number;
     number: number;
+    color: string;
   };
 };
 
@@ -76,7 +77,8 @@ Alpine.data("keyboard", () => ({
       const max = Math.max(...Object.values(this.heatmap).map((v) => v.number));
 
       Object.keys(this.heatmap).forEach((k) => {
-        this.heatmap[k].heat = (this.heatmap[k].number / max) * 100;
+        this.heatmap[k].heat = this.heatmap[k].number / max;
+        this.heatmap[k].color = this.getColor(this.heatmap[k].heat);
       });
     });
   },
@@ -101,6 +103,13 @@ Alpine.data("keyboard", () => ({
         this.layout = text;
       });
     }
+  },
+
+  getColor(value: number) {
+    const h = 350;
+    const s = 60;
+    const l = -(value * 70) + 100;
+    return `hsl(${h}, ${s}%, ${l}%)`;
   },
 }));
 

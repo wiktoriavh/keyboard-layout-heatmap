@@ -32,15 +32,8 @@
             <template x-for="letter in row.split('')">
               <kbd
                 x-text="letter"
-                class="px-2 border-2 border-gray-500 font-mono text-4xl aspect-square w-12 text-center bg-white"
-                :class="{
-                  'bg-[#003049]': heatmap[letter]?.heat >= 80,
-                  'bg-[#D62828]': heatmap[letter]?.heat >= 60 && heatmap[letter].heat < 80,
-                  'bg-[#F77F00]': heatmap[letter]?.heat >= 40 && heatmap[letter].heat < 60,
-                  'bg-[#FCBF49]': heatmap[letter]?.heat >= 20 && heatmap[letter].heat < 40,
-                  'bg-[#EAE2B7]': heatmap[letter]?.heat < 20,
-                  'bg-white': heatmap[letter]?.heat === 0,
-                }"
+                class="px-2 border-2 border-gray-500 font-mono text-4xl aspect-square w-12 text-center"
+                :style="{ backgroundColor: heatmap[letter]?.color }"
               ></kbd>
             </template>
           </div>
