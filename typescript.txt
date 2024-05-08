@@ -1,0 +1,93 @@
+type Product = {
+  id: number;
+  name: string;
+  price: number;
+};
+
+type CartItem = {
+  product: Product;
+  quantity: number;
+};
+
+type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered';
+
+type Order = {
+  id: number;
+  items: CartItem[];
+  status: OrderStatus;
+  totalPrice: number;
+};
+
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  address: string;
+};
+
+type ShoppingCart = {
+  user: User;
+  items: CartItem[];
+  addProduct: (product: Product, quantity: number) => void;
+  removeProduct: (productId: number) => void;
+  checkout: () => Order;
+};
+
+const createShoppingCart = (user: User): ShoppingCart => {
+  const items: CartItem[] = [];
+
+  const addProduct = (product: Product, quantity: number): void => {
+    const existingItem = items.find(item => item.product.id === product.id);
+    if (existingItem) {
+      existingItem.quantity += quantity;
+    } else {
+      items.push({ product, quantity });
+    }
+  };
+
+  const removeProduct = (productId: number): void => {
+    const index = items.findIndex(item => item.product.id === productId);
+    if (index !== -1) {
+      items.splice(index, 1);
+    }
+  };
+
+  const checkout = (): Order => {
+    const totalPrice = items.reduce((total, item) => total + item.product.price * item.quantity, 0);
+    const order: Order = {
+      id: Math.floor(Math.random() * 1000),
+      items: [...items],
+      status: 'pending',
+      totalPrice,
+    };
+    // Assuming some checkout logic here
+    return order;
+  };
+
+  return {
+    user,
+    items,
+    addProduct,
+    removeProduct,
+    checkout,
+  };
+};
+
+const user: User = {
+  id: 1,
+  name: 'John Doe',
+  email: 'john@example.com',
+  address: '123 Main St, Anytown',
+};
+
+const cart = createShoppingCart(user);
+
+cart.addProduct({ id: 1, name: 'Laptop', price: 999 }, 2);
+cart.addProduct({ id: 2, name: 'Smartphone', price: 699 }, 1);
+console.log(cart.items);
+
+cart.removeProduct(1);
+console.log(cart.items);
+
+const order = cart.checkout();
+console.log(order);
