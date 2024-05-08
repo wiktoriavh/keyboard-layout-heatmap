@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empty HTML Example</title>
+</head>
+<body>
+  <header>
+    <!-- Empty header -->
+  </header>
+  <nav>
+    <!-- Empty navigation menu -->
+  </nav>
+  <main>
+    <!-- Empty main content -->
+  </main>
+  <footer>
+    <!-- Empty footer -->
+  </footer>
+</body>
+</html>

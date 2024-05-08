@@ -2,6 +2,8 @@ import "./style.css";
 
 import Alpine from "alpinejs";
 
+window.Alpine ??= Alpine;
+
 type Heatmap = {
   [x: string]: {
     heat: number;
@@ -38,12 +40,25 @@ const defaultHeatmap: Heatmap = {
   z: { heat: 0, number: 0 },
 };
 
+function readTextFile(file: string): Promise<string> {
+  return fetch(file)
+    .then((response) => response.text())
+    .catch((error) => {
+      console.error("Error reading file:", error);
+      throw error;
+    });
+}
+
 Alpine.data("keyboard", () => ({
-  layout: "xvlcwkhgfq\nuiaeosnrtdy\nüöäpzbm,.j",
+  layout: "",
   sample: "uiaeosnrtdyuaonty",
   heatmap: defaultHeatmap,
+  samples: {} as Record<string, string>,
+  layouts: {} as Record<string, string>,
 
   init() {
+    this.getLayout("neo-german");
+
     this.$watch("sample", (input) => {
       this.heatmap = input
         .replace(/\s/gm, "")
@@ -64,6 +79,28 @@ Alpine.data("keyboard", () => ({
         this.heatmap[k].heat = (this.heatmap[k].number / max) * 100;
       });
     });
+  },
+
+  setSample(sampleType: string) {
+    if (this.samples.hasOwnProperty(sampleType)) {
+      this.sample = this.samples[sampleType];
+    } else {
+      readTextFile(`${sampleType}.txt`).then((text) => {
+        this.samples[sampleType] = text;
+        this.sample = text;
+      });
+    }
+  },
+
+  getLayout(layout: string) {
+    if (this.layouts.hasOwnProperty(layout)) {
+      this.layout = this.layouts[layout];
+    } else {
+      readTextFile(`${layout}.txt`).then((text) => {
+        this.layouts[layout] = text;
+        this.layout = text;
+      });
+    }
   },
 }));
 
