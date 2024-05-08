@@ -13,32 +13,136 @@ type Heatmap = {
 };
 
 const defaultHeatmap: Heatmap = {
-  a: { heat: 0, number: 0 },
-  b: { heat: 0, number: 0 },
-  c: { heat: 0, number: 0 },
-  d: { heat: 0, number: 0 },
-  e: { heat: 0, number: 0 },
-  f: { heat: 0, number: 0 },
-  g: { heat: 0, number: 0 },
-  h: { heat: 0, number: 0 },
-  i: { heat: 0, number: 0 },
-  j: { heat: 0, number: 0 },
-  k: { heat: 0, number: 0 },
-  l: { heat: 0, number: 0 },
-  m: { heat: 0, number: 0 },
-  n: { heat: 0, number: 0 },
-  o: { heat: 0, number: 0 },
-  p: { heat: 0, number: 0 },
-  q: { heat: 0, number: 0 },
-  r: { heat: 0, number: 0 },
-  s: { heat: 0, number: 0 },
-  t: { heat: 0, number: 0 },
-  u: { heat: 0, number: 0 },
-  v: { heat: 0, number: 0 },
-  w: { heat: 0, number: 0 },
-  x: { heat: 0, number: 0 },
-  y: { heat: 0, number: 0 },
-  z: { heat: 0, number: 0 },
+  a: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  b: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  c: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  d: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  e: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  f: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  g: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  h: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  i: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  j: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  k: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  l: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  m: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  n: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  o: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  p: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  q: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  r: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  s: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  t: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  u: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  v: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  w: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  x: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  y: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
+  z: {
+    heat: 0,
+    number: 0,
+    color: "",
+  },
 };
 
 function readTextFile(file: string): Promise<string> {
@@ -69,7 +173,7 @@ Alpine.data("keyboard", () => ({
           if (acc.hasOwnProperty(char)) {
             acc[char].number++;
           } else {
-            acc[char] = { number: 1, heat: 0 };
+            acc[char] = { number: 1, heat: 0, color: "" };
           }
           return acc;
         }, {} as Heatmap);
