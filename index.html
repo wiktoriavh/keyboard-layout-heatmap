@@ -6,60 +6,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Keyboard Layout Heatmap</title>
   </head>
-  <body class="h-screen flex justify-center items-center">
-    <div class="gap-4" x-data="keyboard" id="foo">
-      <section class="py-4">
-        <h1 class="text-4xl font-bold">Layout</h1>
-        <textarea class="w-full my-4 h-24" x-model="layout"></textarea>
-        <div
-          class="flex gap-4"
-          x-data="{ text: [{key:'neo-german',name:'Neo DE'}, {key:'qwerty',name:'QWERTY'}, {key:'qwertz',name:'QWERTZ DE'}] }"
-        >
-          <template x-for="item in text">
-            <button
-              class="border-2 rounded-lg px-4 py-2 hover:bg-gray-200 active:bg-gray-400"
-              @click="getLayout(item.key)"
-            >
-              <span x-text="item.name"></span>
-            </button>
-          </template>
-        </div>
-      </section>
-
-      <section class="border-2 border-gray-400 p-4 flex flex-col gap-4">
-        <template x-for="row in layout.split('\n')">
-          <div class="flex gap-4">
-            <template x-for="letter in row.split('')">
-              <kbd
-                x-text="letter"
-                class="px-2 border-2 border-gray-500 font-mono text-4xl aspect-square w-12 text-center"
-                :style="{ backgroundColor: heatmap[letter]?.color }"
-              ></kbd>
-            </template>
-          </div>
+  <body
+    class="h-screen flex flex-col justify-center items-center"
+    x-data="keyboard"
+  >
+    <section class="py-4 w-9/12">
+      <h1 class="text-4xl font-bold">Layout</h1>
+      <textarea class="w-full my-4 h-24" x-model="layout"></textarea>
+      <div
+        class="flex gap-4"
+        x-data="{ text: [
+          {key:'neo-german',name:'Neo DE'},
+          {key:'qwerty',name:'QWERTY'},
+          {key:'qwertz',name:'QWERTZ DE'},
+          {key:'colemak',name:'Colemak'}
+        ] }"
+      >
+        <template x-for="item in text">
+          <button
+            class="border-2 rounded-lg px-4 py-2 hover:bg-gray-200 active:bg-gray-400"
+            @click="getLayout(item.key)"
+          >
+            <span x-text="item.name"></span>
+          </button>
         </template>
-      </section>
+      </div>
+      <div
+        class="flex gap-4"
+        x-data="{ text: [
+          {key:'neo-german-symbol',name:'Neo DE full'},
+          {key:'qwerty-symbol',name:'QWERTY full'},
+          {key:'qwertz-symbol',name:'QWERTZ DE full'},
+          {key:'colemak-symbol',name:'Colemak full'}
+        ] }"
+      >
+        <template x-for="item in text">
+          <button
+            class="border-2 rounded-lg px-4 py-2 hover:bg-gray-200 active:bg-gray-400"
+            @click="getLayout(item.key)"
+          >
+            <span x-text="item.name"></span>
+          </button>
+        </template>
+      </div>
+    </section>
 
-      <section class="py-4">
-        <h1 class="text-4xl font-bold">Sample Text</h1>
-        <textarea class="w-full my-4 h-24" x-model="sample"></textarea>
-        <div
-          class="flex gap-4"
-          x-data="{ text: ['keyboard', 'html', 'typescript'] }"
-        >
-          <template x-for="item in text">
-            <button
-              class="border-2 rounded-lg px-4 py-2 hover:bg-gray-200 active:bg-gray-400"
-              @click="setSample(item)"
-            >
-              <span
-                x-text="item.replace(/(?:^|\s)\w/g, match => match.toUpperCase())"
-              ></span>
-            </button>
+    <section
+      class="rounded-lg p-4 flex flex-col gap-2 bg-gradient-to-b from-slate-700 to-slate-950"
+    >
+      <template x-for="row in layout.split('\n')">
+        <div class="flex gap-2">
+          <template x-for="letter in row.split('')">
+            <kbd
+              x-text="letter"
+              class="px-2 border-2 border-slate-500 bg-gradient-to-tr from-white/50 font-mono text-4xl aspect-square w-12 text-center rounded-lg"
+              :style="{ backgroundColor: heatmap[letter]?.color }"
+            ></kbd>
           </template>
         </div>
-      </section>
-    </div>
+      </template>
+    </section>
+
+    <section class="py-4 w-9/12">
+      <h1 class="text-4xl font-bold">Sample Text</h1>
+      <textarea class="w-full my-4 h-24" x-model="sample"></textarea>
+      <div
+        class="flex gap-4"
+        x-data="{ text: ['keyboard', 'html', 'typescript'] }"
+      >
+        <template x-for="item in text">
+          <button
+            class="border-2 rounded-lg px-4 py-2 hover:bg-gray-200 active:bg-gray-400"
+            @click="setSample(item)"
+          >
+            <span
+              x-text="item.replace(/(?:^|\s)\w/g, match => match.toUpperCase())"
+            ></span>
+          </button>
+        </template>
+      </div>
+    </section>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
