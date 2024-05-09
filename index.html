@@ -10,40 +10,20 @@
     class="h-screen flex flex-col justify-center items-center"
     x-data="keyboard"
   >
-    <section class="p-4 w-9/12">
-      <h1 class="text-4xl font-bold">Layout</h1>
-      <textarea class="w-full my-4 h-24" x-model="layout"></textarea>
+    <section class="p-4 w-9/12 flex align-center gap-4">
+      <h1 class="text-4xl font-bold mb-4">Layout:</h1>
       <div
         class="flex gap-4 flex-wrap"
         x-data="{ text: [
-          {key:'neo-german',name:'Neo DE'},
-          {key:'qwerty',name:'QWERTY'},
-          {key:'qwertz',name:'QWERTZ DE'},
-          {key:'colemak',name:'Colemak'}
+          {key: 'qwerty', name: 'QWERTY'},
+          {key: 'colemak', name: 'Colemak'}
         ] }"
       >
         <template x-for="item in text">
           <button
-            class="border-2 rounded-lg px-4 py-2 hover:bg-gray-200 active:bg-gray-400"
+            class="bg-gray-100 border-2 border-slate-600 rounded-lg px-4 hover:bg-gray-200 active:bg-gray-400 leading-none h-12"
             @click="getLayout(item.key)"
-          >
-            <span x-text="item.name"></span>
-          </button>
-        </template>
-      </div>
-      <div
-        class="flex gap-4"
-        x-data="{ text: [
-          {key:'neo-german-symbol',name:'Neo DE full'},
-          {key:'qwerty-symbol',name:'QWERTY full'},
-          {key:'qwertz-symbol',name:'QWERTZ DE full'},
-          {key:'colemak-symbol',name:'Colemak full'}
-        ] }"
-      >
-        <template x-for="item in text">
-          <button
-            class="border-2 rounded-lg px-4 py-2 hover:bg-gray-200 active:bg-gray-400"
-            @click="getLayout(item.key)"
+            :class="layout === item.key && 'bg-slate-600 text-white hover:bg-gray-800 hover:border-gray-800 active:bg-gray-950 active:border-gray-950'"
           >
             <span x-text="item.name"></span>
           </button>
@@ -51,35 +31,74 @@
       </div>
     </section>
 
+    <section class="flex justify-center items-center gap-4 py-4">
+      Ortholinear
+      <button
+        @click="toggleStaggered()"
+        x-bind:class="staggered ? 'bg-slate-600' : 'bg-slate-200'"
+        type="button"
+        class="relative inline-flex flex-shrink-0 h-7 w-12 border-2 border-transparent rounded-full cursor-pointer shadow-sm transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
+      >
+        <div
+          x-bind:class="staggered ? 'translate-x-5' : 'translate-x-0'"
+          class="relative h-6 w-6 ring-0 rounded-full transform bg-white shadow transition duration-200 ease-in-out pointer-events-none flex justify-center items-center"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-4 h-4 transition-all"
+            :class="staggered && 'rotate-180'"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15.75 19.5 8.25 12l7.5-7.5"
+            />
+          </svg>
+        </div>
+      </button>
+      Staggered
+    </section>
+
     <section
       class="rounded-lg p-4 flex flex-col gap-1 bg-slate-700 broder-slate-800 border-t-slate-500 border-l-slate-500 border-2"
     >
-      <div class="bg-slate-900 p-1 rounded-lg">
-        <template x-for="row in layout.split('\n')">
+      <div class="bg-slate-900 p-1 rounded-lg text-[3rem]">
+        <template x-for="(row, rowIndex) in layouts[layout]">
           <div class="flex gap-1">
-            <template x-for="letter in row.split('')">
-              <div class="h-10 min-w-10 flex-grow relative">
+            <template x-for="(key, keyIndex) in row">
+              <div
+                class="h-[1em] min-w-[1em] relative"
+                :style="{width: key[staggered ? 'staggered' : 'linear'], flexGrow: key.flexGrow ? 1 : 0}"
+                x-show="key[staggered ? 'staggered' : 'linear']"
+              >
                 <button
-                  class="overflow-hidden relative h-10 aspect-square px-1 rounded flex justify-center shadow align-center bg-gradient-to-b from-slate-50 to-slate-400 pt-[2px] transition-all duration-75 top-0 active:top-1"
+                  class="overflow-hidden relative h-[1em] min-w-[1em] w-full px-1 rounded flex justify-center shadow align-center bg-gradient-to-b from-slate-50 to-slate-400 pt-[2px] transition-all duration-75 top-0 active:top-1"
                 >
                   <div
-                    class="w-full h-10 absolute -top-[2px] left-0 flex items-center justify-between blur-sm"
+                    class="w-full h-[1em] absolute -top-[2px] left-0 flex items-center justify-between blur-sm"
                   >
                     <div
-                      class="h-8 w-8 bg-slate-200 flex-shrink-0 rotate-45 -left-5 relative"
+                      class="h-[.8em] w-[.8em] bg-slate-200 flex-shrink-0 rotate-45 -left-5 relative"
                     ></div>
                     <div
-                      class="h-8 w-8 bg-slate-200 flex-shrink-0 rotate-45 -right-5 relative"
+                      class="h-[.8em] w-[.8em] bg-slate-200 flex-shrink-0 rotate-45 -right-5 relative"
                     ></div>
                   </div>
                   <div
-                    class="h-7 w-full border border-slate-100 flex-grow bg-gradient-to-b from-slate-200 to-slate-50 flex pt-1 pl-1 rounded"
+                    class="h-[.7em] w-full border border-slate-100 flex-grow bg-gradient-to-b from-slate-200 to-slate-50 flex pt-1 pl-1 rounded"
                   >
                     <div
                       class="w-full h-full absolute top-0 left-0 opacity-50"
-                      :style="{ backgroundColor: heatmap[letter]?.color }"
+                      :style="{ backgroundColor: heatmap[key.value.toLowerCase()]?.color }"
                     ></div>
-                    <span x-text="letter" class="relative leading-none"></span>
+                    <span
+                      x-text="key.value"
+                      class="relative leading-none text-sm"
+                    ></span>
                   </div>
                 </button>
               </div>

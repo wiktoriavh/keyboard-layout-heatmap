@@ -1,4 +1,6 @@
 import { Heatmap, defaultHeatmap } from "./defaulHeatmap";
+import { colemak } from "./lib/colemak";
+import { qwerty } from "./lib/qwerty";
 import "./style.css";
 
 import Alpine from "alpinejs";
@@ -15,15 +17,14 @@ function readTextFile(file: string): Promise<string> {
 }
 
 Alpine.data("keyboard", () => ({
-  layout: "",
-  sample: "",
+  layout: "qwerty",
+  sample: "qwerty",
   heatmap: defaultHeatmap,
   samples: {} as Record<string, string>,
-  layouts: {} as Record<string, string>,
+  layouts: { qwerty, colemak },
+  staggered: false,
 
   init() {
-    this.getLayout("neo-german");
-
     this.$watch("sample", (input) => {
       this.heatmap = input
         .replace(/\s/gm, "")
@@ -59,14 +60,7 @@ Alpine.data("keyboard", () => ({
   },
 
   getLayout(layout: string) {
-    if (this.layouts.hasOwnProperty(layout)) {
-      this.layout = this.layouts[layout];
-    } else {
-      readTextFile(`${layout}.txt`).then((text) => {
-        this.layouts[layout] = text;
-        this.layout = text;
-      });
-    }
+    this.layout = layout;
   },
 
   getColor(value: number) {
@@ -74,6 +68,10 @@ Alpine.data("keyboard", () => ({
     const s = 60;
     const l = -(value * 70) + 100;
     return `hsl(${h}, ${s}%, ${l}%)`;
+  },
+
+  toggleStaggered() {
+    this.staggered = !this.staggered;
   },
 }));
 
