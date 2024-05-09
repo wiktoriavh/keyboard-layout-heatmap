@@ -5,18 +5,18 @@
     <link rel="icon" type="image/svg+xml" href="/keyboard-layout-heatmap/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Keyboard Layout Heatmap</title>
-    <script type="module" crossorigin src="/keyboard-layout-heatmap/assets/index-QbPirmxu.js"></script>
-    <link rel="stylesheet" crossorigin href="/keyboard-layout-heatmap/assets/index-XYYgRJii.css">
+    <script type="module" crossorigin src="/keyboard-layout-heatmap/assets/index-CuqoGzyR.js"></script>
+    <link rel="stylesheet" crossorigin href="/keyboard-layout-heatmap/assets/index-BCE3l_sP.css">
   </head>
   <body
     class="h-screen flex flex-col justify-center items-center"
     x-data="keyboard"
   >
-    <section class="py-4 w-9/12">
+    <section class="p-4 w-9/12">
       <h1 class="text-4xl font-bold">Layout</h1>
       <textarea class="w-full my-4 h-24" x-model="layout"></textarea>
       <div
-        class="flex gap-4"
+        class="flex gap-4 flex-wrap"
         x-data="{ text: [
           {key:'neo-german',name:'Neo DE'},
           {key:'qwerty',name:'QWERTY'},
@@ -54,19 +54,41 @@
     </section>
 
     <section
-      class="rounded-lg p-4 flex flex-col gap-2 bg-gradient-to-b from-slate-700 to-slate-950"
+      class="rounded-lg p-4 flex flex-col gap-1 bg-slate-700 broder-slate-800 border-t-slate-500 border-l-slate-500 border-2"
     >
-      <template x-for="row in layout.split('\n')">
-        <div class="flex gap-2">
-          <template x-for="letter in row.split('')">
-            <kbd
-              x-text="letter"
-              class="px-2 border-2 border-slate-500 bg-gradient-to-tr from-white/50 font-mono text-4xl aspect-square w-12 text-center rounded-lg"
-              :style="{ backgroundColor: heatmap[letter]?.color }"
-            ></kbd>
-          </template>
-        </div>
-      </template>
+      <div class="bg-slate-900 p-1 rounded-lg">
+        <template x-for="row in layout.split('\n')">
+          <div class="flex gap-1">
+            <template x-for="letter in row.split('')">
+              <div class="h-10 min-w-10 flex-grow relative">
+                <button
+                  class="overflow-hidden relative h-10 aspect-square px-1 rounded flex justify-center shadow align-center bg-gradient-to-b from-slate-50 to-slate-400 pt-[2px] transition-all duration-75 top-0 active:top-1"
+                >
+                  <div
+                    class="w-full h-10 absolute -top-[2px] left-0 flex items-center justify-between blur-sm"
+                  >
+                    <div
+                      class="h-8 w-8 bg-slate-200 flex-shrink-0 rotate-45 -left-5 relative"
+                    ></div>
+                    <div
+                      class="h-8 w-8 bg-slate-200 flex-shrink-0 rotate-45 -right-5 relative"
+                    ></div>
+                  </div>
+                  <div
+                    class="h-7 w-full border border-slate-100 flex-grow bg-gradient-to-b from-slate-200 to-slate-50 flex pt-1 pl-1 rounded"
+                  >
+                    <div
+                      class="w-full h-full absolute top-0 left-0 opacity-50"
+                      :style="{ backgroundColor: heatmap[letter]?.color }"
+                    ></div>
+                    <span x-text="letter" class="relative leading-none"></span>
+                  </div>
+                </button>
+              </div>
+            </template>
+          </div>
+        </template>
+      </div>
     </section>
 
     <section class="py-4 w-9/12">
