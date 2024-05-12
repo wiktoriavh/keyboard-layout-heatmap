@@ -14,7 +14,9 @@
           class="flex gap-4 flex-wrap"
           x-data="{ text: [
           {key: 'qwerty', name: 'QWERTY'},
-          {key: 'colemak', name: 'Colemak'}
+          {key: 'colemak', name: 'Colemak'},
+          {key: 'colemakDH', name: 'Colemak DH'},
+          {key: 'dvorak', name: 'Dvorak'},
         ] }"
         >
           <template x-for="item in text">
@@ -29,49 +31,16 @@
         </div>
       </section>
 
-      <section class="flex justify-center items-center gap-4 py-4">
-        Ortholinear
-        <button
-          @click="toggleStaggered()"
-          x-bind:class="staggered ? 'bg-slate-600' : 'bg-slate-200'"
-          type="button"
-          class="relative inline-flex flex-shrink-0 h-7 w-12 border-2 border-transparent rounded-full cursor-pointer shadow-sm transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
-        >
-          <div
-            x-bind:class="staggered ? 'translate-x-5' : 'translate-x-0'"
-            class="relative h-6 w-6 ring-0 rounded-full transform bg-white shadow transition duration-200 ease-in-out pointer-events-none flex justify-center items-center"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-4 h-4 transition-all"
-              :class="staggered && 'rotate-180'"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M15.75 19.5 8.25 12l7.5-7.5"
-              />
-            </svg>
-          </div>
-        </button>
-        Staggered
-      </section>
-
       <section
         class="rounded-lg p-4 flex flex-col gap-1 bg-slate-700 broder-slate-800 border-t-slate-500 border-l-slate-500 border-2"
       >
         <div class="bg-slate-900 p-1 rounded-lg text-[3rem]">
-          <template x-for="(row, rowIndex) in layouts[layout]">
+          <template x-for="(row, rowIndex) in keyboard">
             <div class="flex gap-1">
               <template x-for="(key, keyIndex) in row">
                 <kbd
                   class="h-[1em] min-w-[1em] relative"
-                  :style="{width: key[staggered ? 'staggered' : 'linear'], flexGrow: key.flexGrow ? 1 : 0}"
-                  x-show="key[staggered ? 'staggered' : 'linear']"
+                  :style="{width: key.size + 'em', flexGrow: row.length - 1 === keyIndex ? 1 : 0}"
                 >
                   <div
                     class="overflow-hidden relative h-[1em] min-w-[1em] w-full px-1 rounded flex justify-center shadow align-center bg-gradient-to-b from-slate-50 to-slate-400 pt-[2px] transition-all duration-75 top-0 active:top-1"
@@ -147,13 +116,7 @@
           class="text-rose-700 underline underline-offset-3 hover:bg-rose-100"
           >Rob Stinson</a
         >
-        for the keyboard CSS and HTML, and
-        <a
-          href="https://codepen.io/brunofao/pen/LYyPjjg"
-          class="text-rose-700 underline underline-offset-3 hover:bg-rose-100"
-          >Bruno Fao</a
-        >
-        for the toggle.
+        for the keyboard CSS and HTML.
       </p>
     </footer>
 

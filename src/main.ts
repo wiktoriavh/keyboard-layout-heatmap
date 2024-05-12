@@ -1,6 +1,7 @@
 import { Heatmap, defaultHeatmap } from "./defaulHeatmap";
-import { colemak } from "./lib/colemak";
-import { qwerty } from "./lib/qwerty";
+import { ansi } from "./lib/boards";
+import { colemak, colemakDH, dvorak, qwerty } from "./lib/layouts";
+
 import "./style.css";
 
 import Alpine from "alpinejs";
@@ -16,15 +17,49 @@ function readTextFile(file: string): Promise<string> {
     });
 }
 
+type Keyboard = {
+  value: string;
+  size: number;
+};
+
 Alpine.data("keyboard", () => ({
   layout: "qwerty",
   sample: "",
   heatmap: defaultHeatmap,
   samples: {} as Record<string, string>,
-  layouts: { qwerty, colemak },
+  layouts: { qwerty, colemak, colemakDH, dvorak } as Record<string, string[][]>,
   staggered: false,
 
+  board: "ansi",
+  boards: { ansi } as Record<string, { size: number }[][]>,
+
+  keyboard: [] as Keyboard[][],
+
   init() {
+    this.keyboard = this.boards[this.board].map((row, rowIndex) => {
+      return row.map((key, keyIndex) => {
+        return {
+          value: this.layouts[this.layout][rowIndex][keyIndex],
+          ...key,
+        };
+      });
+    });
+
+    this.$watch("layout", (layout) => {
+      this.keyboard = this.boards[this.board].map((row, rowIndex) => {
+        return row.map((key, keyIndex) => {
+          return {
+            value: this.layouts[layout][rowIndex][keyIndex],
+            ...key,
+          };
+        });
+      });
+    });
+
+    this.$watch("board", (layout) => {
+      //
+    });
+
     this.$watch("sample", (input) => {
       this.heatmap = input
         .replace(/\s/gm, "")
