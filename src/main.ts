@@ -1,6 +1,11 @@
 import { Heatmap, defaultHeatmap } from "./defaulHeatmap";
 import { ansi } from "./lib/boards";
-import { colemak, colemakDH, dvorak, qwerty } from "./lib/layouts";
+import {
+  ansiColemak,
+  ansiColemakDH,
+  ansiDvorak,
+  ansiQwerty,
+} from "./lib/ansiLayouts";
 
 import "./style.css";
 
@@ -22,12 +27,38 @@ type Keyboard = {
   size: number;
 };
 
+type Layouts = {
+  [keyB: string]: {
+    name: string;
+    value: { [keyL: string]: { value: string[][]; name: string } };
+  };
+};
+
 Alpine.data("keyboard", () => ({
   layout: "qwerty",
   sample: "",
   heatmap: defaultHeatmap,
   samples: {} as Record<string, string>,
-  layouts: { qwerty, colemak, colemakDH, dvorak } as Record<string, string[][]>,
+  layouts: {
+    ansi: {
+      name: "ANSI Standard",
+      value: {
+        qwerty: { value: ansiQwerty, name: "QWERTY" },
+        colemak: { value: ansiColemak, name: "Colemak" },
+        colemakDH: { value: ansiColemakDH, name: "Colemak DH" },
+        dvorak: { value: ansiDvorak, name: "Dvorak" },
+      },
+    },
+    // planck: {
+    //   name: "Planck",
+    //   value: {
+    //     nope: {
+    //       value: [[]],
+    //       name: "Nope",
+    //     },
+    //   },
+    // },
+  } as Layouts,
   staggered: false,
 
   board: "ansi",
@@ -36,28 +67,14 @@ Alpine.data("keyboard", () => ({
   keyboard: [] as Keyboard[][],
 
   init() {
-    this.keyboard = this.boards[this.board].map((row, rowIndex) => {
-      return row.map((key, keyIndex) => {
-        return {
-          value: this.layouts[this.layout][rowIndex][keyIndex],
-          ...key,
-        };
-      });
+    this.updateKeyboard();
+
+    this.$watch("layout", () => {
+      this.updateKeyboard();
     });
 
-    this.$watch("layout", (layout) => {
-      this.keyboard = this.boards[this.board].map((row, rowIndex) => {
-        return row.map((key, keyIndex) => {
-          return {
-            value: this.layouts[layout][rowIndex][keyIndex],
-            ...key,
-          };
-        });
-      });
-    });
-
-    this.$watch("board", (layout) => {
-      //
+    this.$watch("board", () => {
+      this.updateKeyboard();
     });
 
     this.$watch("sample", (input) => {
@@ -83,6 +100,20 @@ Alpine.data("keyboard", () => ({
     });
   },
 
+  updateKeyboard() {
+    this.keyboard = this.boards[this.board].map((row, rowIndex) => {
+      return row.map((key, keyIndex) => {
+        return {
+          value:
+            this.layouts[this.board].value[this.layout].value[rowIndex][
+              keyIndex
+            ],
+          ...key,
+        };
+      });
+    });
+  },
+
   setSample(sampleType: string) {
     if (this.samples.hasOwnProperty(sampleType)) {
       this.sample = this.samples[sampleType];
@@ -96,6 +127,10 @@ Alpine.data("keyboard", () => ({
 
   getLayout(layout: string) {
     this.layout = layout;
+  },
+
+  getBoard(board: string) {
+    this.board = board;
   },
 
   getColor(value: number) {
