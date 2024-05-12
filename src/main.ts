@@ -18,7 +18,7 @@ function readTextFile(file: string): Promise<string> {
 
 Alpine.data("keyboard", () => ({
   layout: "qwerty",
-  sample: "qwerty",
+  sample: "",
   heatmap: defaultHeatmap,
   samples: {} as Record<string, string>,
   layouts: { qwerty, colemak },
