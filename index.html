@@ -5,75 +5,53 @@
     <link rel="icon" type="image/svg+xml" href="/keyboard-layout-heatmap/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Keyboard Layout Heatmap</title>
-    <script type="module" crossorigin src="/keyboard-layout-heatmap/assets/index-CpppNVTh.js"></script>
-    <link rel="stylesheet" crossorigin href="/keyboard-layout-heatmap/assets/index-BeNT1Jdc.css">
+    <script type="module" crossorigin src="/keyboard-layout-heatmap/assets/index-CqQpNOya.js"></script>
+    <link rel="stylesheet" crossorigin href="/keyboard-layout-heatmap/assets/index-mywczG45.css">
   </head>
   <body class="h-screen flex flex-col" x-data="keyboard">
     <main class="flex flex-col justify-center items-center flex-1">
+      <h1 class="text-4xl font-bold mb-4">Keyboard Layout Heatmap</h1>
+
       <section class="p-4 w-9/12 flex align-center gap-4">
-        <h1 class="text-4xl font-bold mb-4">Layout:</h1>
-        <div
-          class="flex gap-4 flex-wrap"
-          x-data="{ text: [
-          {key: 'qwerty', name: 'QWERTY'},
-          {key: 'colemak', name: 'Colemak'}
-        ] }"
-        >
-          <template x-for="item in text">
+        <h2 class="text-3xl font-bold mb-4">Board:</h2>
+        <div class="flex gap-4 flex-wrap">
+          <template x-for="(item, index) of layouts">
             <button
               class="bg-gray-100 border-2 border-slate-600 rounded-lg px-4 hover:bg-gray-200 active:bg-gray-400 leading-none h-12"
-              @click="getLayout(item.key)"
-              :class="layout === item.key && 'bg-slate-600 text-white hover:bg-gray-800 hover:border-gray-800 active:bg-gray-950 active:border-gray-950'"
+              @click="getBoard(index)"
+              :class="board === index && 'bg-slate-600 text-white hover:bg-gray-800 hover:border-gray-800 active:bg-gray-950 active:border-gray-950'"
             >
-              <span x-text="item.name"></span>
+              <span x-text="layouts[index].name"></span>
             </button>
           </template>
         </div>
       </section>
 
-      <section class="flex justify-center items-center gap-4 py-4">
-        Ortholinear
-        <button
-          @click="toggleStaggered()"
-          x-bind:class="staggered ? 'bg-slate-600' : 'bg-slate-200'"
-          type="button"
-          class="relative inline-flex flex-shrink-0 h-7 w-12 border-2 border-transparent rounded-full cursor-pointer shadow-sm transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
-        >
-          <div
-            x-bind:class="staggered ? 'translate-x-5' : 'translate-x-0'"
-            class="relative h-6 w-6 ring-0 rounded-full transform bg-white shadow transition duration-200 ease-in-out pointer-events-none flex justify-center items-center"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-4 h-4 transition-all"
-              :class="staggered && 'rotate-180'"
+      <section class="p-4 w-9/12 flex align-center gap-4">
+        <h2 class="text-3xl font-bold mb-4">Layout:</h2>
+        <div class="flex gap-4 flex-wrap">
+          <template x-for="(item, index) of layouts[board].value">
+            <button
+              class="bg-gray-100 border-2 border-slate-600 rounded-lg px-4 hover:bg-gray-200 active:bg-gray-400 leading-none h-12"
+              @click="getLayout(index)"
+              :class="layout === index && 'bg-slate-600 text-white hover:bg-gray-800 hover:border-gray-800 active:bg-gray-950 active:border-gray-950'"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M15.75 19.5 8.25 12l7.5-7.5"
-              />
-            </svg>
-          </div>
-        </button>
-        Staggered
+              <span x-text="layouts[board].value[index].name"></span>
+            </button>
+          </template>
+        </div>
       </section>
 
       <section
         class="rounded-lg p-4 flex flex-col gap-1 bg-slate-700 broder-slate-800 border-t-slate-500 border-l-slate-500 border-2"
       >
         <div class="bg-slate-900 p-1 rounded-lg text-[3rem]">
-          <template x-for="(row, rowIndex) in layouts[layout]">
+          <template x-for="(row, rowIndex) in keyboard">
             <div class="flex gap-1">
               <template x-for="(key, keyIndex) in row">
                 <kbd
                   class="h-[1em] min-w-[1em] relative"
-                  :style="{width: key[staggered ? 'staggered' : 'linear'], flexGrow: key.flexGrow ? 1 : 0}"
-                  x-show="key[staggered ? 'staggered' : 'linear']"
+                  :style="{width: key.size + 'em', flexGrow: row.length - 1 === keyIndex ? 1 : 0}"
                 >
                   <div
                     class="overflow-hidden relative h-[1em] min-w-[1em] w-full px-1 rounded flex justify-center shadow align-center bg-gradient-to-b from-slate-50 to-slate-400 pt-[2px] transition-all duration-75 top-0 active:top-1"
@@ -149,13 +127,7 @@
           class="text-rose-700 underline underline-offset-3 hover:bg-rose-100"
           >Rob Stinson</a
         >
-        for the keyboard CSS and HTML, and
-        <a
-          href="https://codepen.io/brunofao/pen/LYyPjjg"
-          class="text-rose-700 underline underline-offset-3 hover:bg-rose-100"
-          >Bruno Fao</a
-        >
-        for the toggle.
+        for the keyboard CSS and HTML.
       </p>
     </footer>
 
